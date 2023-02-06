@@ -17,57 +17,86 @@
       rel="stylesheet"
     />
 
+    <!-- SCRIPTS -->
+    <script src="./src/scripts/database.js" type="module" defer></script>
+    <script src="./src/scripts/index.js" type="module" defer></script>
+
     <title>Criando rede social</title>
   </head>
   <body>
     <header>
       <figure>
-        <img class="header__logo" src="" alt="" />
+        <img class="header__logo" src="" alt="TechPosters" />
       </figure>
-      <button type="submit" class="button__header--login"></button>
+      <button type="submit" class="button__header--login">Login</button>
     </header>
     <main class="main__container"></main>
     <section class="container__new-post">
-      <div class="box__new-post--user">
-        <img src="" alt="" class="user__new-post--img" />
-        <h2 class="user__new-post--name"></h2>
-        <p class="user__new-post--occupation"></p>
+      <div class="box__user box__user--new-post">
+        <!--     <img src="" alt="" class="user__img" />
+        <h2 class="user__name"></h2>
+        <p class="user__occupation"></p> -->
       </div>
-      <div class="box__new-post--comment">
-        <input type="text" class="input__new-post--title" />
-        <input type="text" class="input__new-post--commentar" />
-        <button type="submit" class="button__new-post--submit"></button>
+      <div class="box__comment box__comment--new-post">
+        <input
+          type="text"
+          class="input__title"
+          placeholder="Digitar título do post"
+        />
+        <input
+          type="text"
+          class="input__commentar"
+          placeholder="Digitar descrição do post"
+        />
+        <button type="submit" class="button__new-post">Postar</button>
       </div>
     </section>
     <aside class="container__suggest-users">
-      <h2 class="title__suggest-users"></h2>
-      <div class="box__suggest-users">
-        <img src="" alt="" class="user__suggest-users--img" />
-        <h2 class="user__suggest-users--name"></h2>
-        <p class="user__suggest-users--occupation"></p>
-        <button class="button__suggest-users--submit"></button>
+      <h2 class="title__suggest-users">Sugestões para você seguir</h2>
+      <div class="box__user box__user--suggest-users">
+        <ul class="list__suggest-users"></ul>
+        <!--  <li class="item__suggest-user">
+        <img src="" alt="" class="user__img" />
+        <h2 class="user__name"></h2>
+        <p class="user__occupation"></p>
+        <button class="button__suggest-users">Seguir</button>
+      </li> -->
       </div>
     </aside>
     <section class="container__posts">
-      <h1 class="title__posts"></h1>
+      <h1 class="title__posts">Posts</h1>
       <ul class="list__posts">
         <li class="item__post">
-          <div class="box__posts--user">
-            <img src="" alt="" class="user__post--img" />
-            <h2 class="user__post--name"></h2>
-            <p class="user__post--occupation"></p>
-          </div>
-          <div class="box__posts--comment">
+          <!-- <div class="box__user box__user--posts">
+            <img src="" alt="" class="user__img" />
+            <h2 class="user__name"></h2>
+            <p class="user__occupation"></p>
+          </div> -->
+          <div class="box__comment box__comment--posts">
             <h3 class="post__title"></h3>
             <p class="post__commentar"></p>
-            <span>
-              <button type="submit" class="button__post--open-post"></button>
-              <img class="img__post--icon-liked" src="" alt="" />
-              <p class="paragraf__post--count-liked"></p>
+            <span class="box__modal-and-like">
+              <button type="submit" class="button__open-post"></button>
+              <img class="icon__post" src="" alt="" />
+              <p class="count__liked-post"></p>
             </span>
           </div>
         </li>
       </ul>
     </section>
   </body>
+  <dialog class="modal__container">
+    <span>
+      <div class="box__modal box__modal--user">
+        <img src="" alt="" class="user__img" />
+        <h2 class="user__name"></h2>
+        <p class="user__occupation"></p>
+      </div>
+      <button type="submit" class="button__close-post"></button>
+    </span>
+    <div class="box__modal box__modal--comment">
+      <h3 class="post__title"></h3>
+      <p class="post__commentar"></p>
+    </div>
+  </dialog>
 </html>

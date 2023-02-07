@@ -1,11 +1,11 @@
-import { users, posts, suggestUsers } from "./database.js";
-
 //*
 //!
 //?
 //TODO:
 
 //? FUNCOES QUE SERAO EXECUTADAS
+
+import { users, posts, suggestUsers } from "./database.js";
 
 //TODO: FUNCAO RENDER USER
 //* Esta funcao recebe o array final de usuarios  e renderiza os usuarios no local informado no segundo parametro
@@ -34,7 +34,7 @@ function renderUsers(usersArray, local) {
   }
 
   if (local === "newPost") {
-    const listUsers = document.querySelector(".container__new-post");
+    const listUsers = document.querySelector(".box__user--new-post");
     listUsers.innerHTML = "";
 
     usersArray.forEach((user) => {
@@ -45,7 +45,7 @@ function renderUsers(usersArray, local) {
   }
 }
 
-/* renderUsers(suggestUsers, "suggestUser"); */
+renderUsers(suggestUsers, "suggestUser");
 /* renderUsers(posts, "post"); */
 /* renderUsers(returnUser("Aline"), "newPost"); */
 //TODO: FUNCAO CRIAR USER
@@ -113,8 +113,8 @@ function returnUser(inputUser) {
     (user) => standartString(user.user) === normalizeFindUser
   );
   if (existentUser.length > 0) {
-    console.log(users);
-    renderUsers(suggestUsers);
+    console.log(existentUser);
+    renderUsers(existentUser, "newPost");
     return existentUser;
   } else {
     return creatAnonymousUser(inputUser);
@@ -130,40 +130,73 @@ function creatAnonymousUser(userName) {
       id: 99,
       user: "Usuário Anonimo",
       stack: "Futuro Desenvolvedor",
-      img: "https://media1.giphy.com/media/GonbhXpreMkV7SLbdG/giphy.gifuser1.svg",
+      img: "https://i.stack.imgur.com/0jHxz.jpg",
     },
   ];
 
-  suggestUsers.push(anonymousUser);
+  const arrayFinal = suggestUsers.concat(anonymousUser);
   renderUsers(anonymousUser, "newPost");
-  console.log(suggestUsers);
+  console.log(arrayFinal);
   console.log(anonymousUser);
   //* aqui criar um info que ele nao pode seguir os usuarios
   return anonymousUser;
 }
+console.log(returnUser("Carla Maria"));
+//TODO: FUNCAO RENDER FINAL POST
+//* Vamos receber o render o return user e  o render user para cada elemento do array
+//*  Nesta funcao vamos renderizar um post completo  na tela com user e comentario
+//* Esta funcao sera feita a partir array resultande do  posts final
+function renderFinalPost(array) {
+  {
+    const allPosts = document.querySelector(".list__posts");
+    allPosts.innerHTML = "";
 
-//TODO: FUNCAO RENDER POST
-//*  Nesta funcao vamos renderizar um post na tela  com o ser
-//* Esta funcao sera feita a partir do posts final
+    array.forEach((user) => {
+      const renderUser = creatUser(user, "post");
+      const renderPost = creatPost(user);
+      allPosts.appendChild(renderUser);
+      allPosts.appendChild(renderPost);
+    });
 
-//TODO: FUNCAO NOVO POST
-//* Esta funcao insere um post dentro do array posts
-
-//TODO: FUNCAO USUARIOS COM POST
-//* Esta funcao retorna um array com os usuarios que fizem post para ser usada na renderizacao de posts na pagina
-function userWithPosts(postsArray) {
-  const userWithPosts = [];
-  for (let i = 0; i < users.length; i++) {
-    let user = users[i];
-    for (let j = 0; j < postsArray.length; j++) {
-      let post = posts[j];
-      if (user.user === post.user) {
-        userWithPosts.push(user);
-      }
-    }
+    return allPosts;
   }
-  return userWithPosts;
 }
+renderFinalPost(posts);
+//TODO: FUNCAO ARRAY COM NOVO POST
+//* Esta funcao cria um novo elemento post e insere dentro do array posts
+function creatNewObjectPost(event) {
+  event.preventDefault();
+  const imgUserPost = document.querySelector(".user__img");
+  const propietyimg = imgUserPost.src;
+  const userNamePost = document.querySelector(".user__name");
+  const propietyName = userNamePost.innerText;
+  const occupationUserPost = document.querySelector(".user__occupation");
+  const propietyOccupation = occupationUserPost.innerText;
+  const titleValue = document.querySelector(".input__title");
+  const propietyTitle = titleValue.value;
+
+  const textValue = document.querySelector(".input__commentar");
+  const propietyText = textValue.value;
+
+  const newPost = {
+    id: posts.length + 1,
+    title: propietyTitle,
+    text: propietyText,
+    user: propietyName,
+    stack: propietyOccupation,
+    img: propietyimg,
+    likes: 0,
+  };
+
+  posts.push(newPost);
+  posts.reverse();
+  renderFinalPost(posts);
+  return posts;
+}
+
+const newPost = document.querySelector(".button__new-post");
+
+newPost.addEventListener("click", creatNewObjectPost);
 
 //TODO: FUNCAO CRIAR POST
 //* Esta funcao recebe o array final e cria os elementos DOM para a funcao render
@@ -173,7 +206,7 @@ function creatPost(post) {
   const textComment = document.createElement("p");
   const boxModalandLikeComment = document.createElement("span");
   const buttonModalComment = document.createElement("button");
-  const iconLikeComment = document.createElement("img");
+  const iconLikeComment = document.createElement("i");
   const countLikeComment = document.createElement("p");
 
   itemComment.classList.add("box__comment");
@@ -182,13 +215,12 @@ function creatPost(post) {
   textComment.classList.add("post__commentar");
   boxModalandLikeComment.classList.add("box__modal-and-like");
   buttonModalComment.classList.add("button__open-post");
-  iconLikeComment.classList.add("icon__post");
+  iconLikeComment.setAttribute("class", "fa-solid fa-trash-can");
   countLikeComment.classList.add("count__liked-post");
 
   titleComment.innerText = post.title;
   textComment.innerText = post.text;
   buttonModalComment.innerText = "Abrir Post";
-  iconLikeComment.src = post.text; //! baixar biblioteca de icones
   countLikeComment.innerText = post.likes;
 
   itemComment.appendChild(titleComment);

@@ -18,6 +18,10 @@
     />
 
     <!-- SCRIPTS -->
+    <script
+      src="https://kit.fontawesome.com/a5e399c94d.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="./src/scripts/database.js" type="module" defer></script>
     <script src="./src/scripts/index.js" type="module" defer></script>
 
@@ -37,7 +41,8 @@
         <h2 class="user__name"></h2>
         <p class="user__occupation"></p> -->
       </div>
-      <div class="box__comment box__comment--new-post">
+      <div class="box__comment box__comment--new-post"></div>
+      <form id="form__new-post" action="">
         <input
           type="text"
           class="input__title"
@@ -49,7 +54,7 @@
           placeholder="Digitar descrição do post"
         />
         <button type="submit" class="button__new-post">Postar</button>
-      </div>
+      </form>
     </section>
     <aside class="container__suggest-users">
       <h2 class="title__suggest-users">Sugestões para você seguir</h2>

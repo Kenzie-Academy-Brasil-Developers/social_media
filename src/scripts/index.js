@@ -7,7 +7,9 @@
 
 import { users, posts, suggestUsers } from "./database.js";
 
-//TODO: FUNCAO RENDER USER
+//TODO: FUNCOES REDERENTE AO USUARIO
+
+//? FUNCAO RENDER USER
 //* Esta funcao recebe o array final de usuarios  e renderiza os usuarios no local informado no segundo parametro
 function renderUsers(usersArray, local) {
   if (local === "suggestUser") {
@@ -48,7 +50,8 @@ function renderUsers(usersArray, local) {
 renderUsers(suggestUsers, "suggestUser");
 /* renderUsers(posts, "post"); */
 /* renderUsers(returnUser("Aline"), "newPost"); */
-//TODO: FUNCAO CRIAR USER
+
+//? FUNCAO CRIAR USER
 //* Esta funcao recebe um usuario e um local e cria os elementos DOM para a funcao render POST
 function creatUser(user, local) {
   const imgUser = document.createElement("img");
@@ -58,6 +61,10 @@ function creatUser(user, local) {
   imgUser.classList.add("user__img");
   nameUser.classList.add("user__name");
   occupationUser.classList.add("user__occupation");
+
+  imgUser.setAttribute("id", `user__img--${user.id}`);
+  nameUser.setAttribute("id", `user__name--${user.id}`);
+  occupationUser.setAttribute("id", `user__occupation--${user.id}`);
 
   imgUser.src = user.img;
   imgUser.alt = user.user;
@@ -78,7 +85,7 @@ function creatUser(user, local) {
 
     return itemSuggestUser;
   }
-  if (local === "post") {
+  if (local === "post" || local === "modalPost") {
     const postItemUser = document.createElement("div");
     postItemUser.classList.add("box__user");
     postItemUser.classList.add("box__user--posts");
@@ -102,11 +109,14 @@ function creatUser(user, local) {
   }
 }
 
-//TODO: FUNCAO ENTRADA USER
+//TODO: FUNCAO IDENTIFICA USUARIO / MODAL
+
+//? FUNCAO ENTRADA USER ATRAVES DO LOGIN MODAL
 //* Ao clicar no login o usuario insere um nome e sobrenome e envia para esta funcao
 //* se o usuario nao for localizado no array users é criado um usuario anonimo novo com uma img avatar
 //* seo usuario é localizado o usuario é retornado
 //* esta funcao esta sendo chamada na funcao reder user para a secao newpost
+
 function returnUser(inputUser) {
   const normalizeFindUser = standartString(inputUser);
   const existentUser = users.filter(
@@ -142,27 +152,74 @@ function creatAnonymousUser(userName) {
   return anonymousUser;
 }
 console.log(returnUser("Carla Maria"));
-//TODO: FUNCAO RENDER FINAL POST
+
+function renderlogedUser(e) {
+  e.preventDefault();
+  const userLoged = document.querySelector("#input__identify-user").value;
+  returnUser(userLoged);
+  document.querySelector(".modal__form--login").reset();
+}
+
+function handleModalLogin() {
+  const openModalLogin = document.querySelector(".header__button--modal");
+  const modalController = document.querySelector(".modal__controller-login");
+
+  openModalLogin.addEventListener("click", () => {
+    modalController.showModal();
+  });
+
+  closeModalLogin();
+}
+
+handleModalLogin();
+
+function closeModalLogin() {
+  const closeModalLogin = document.querySelector(".button__identify-user");
+  const modalController = document.querySelector(".modal__controller-login");
+
+  closeModalLogin.addEventListener("click", () => {
+    modalController.close();
+  });
+
+  closeModalLogin.addEventListener("click", renderlogedUser);
+}
+
+//TODO: FUNCOES REFERENTE AOS POSTS
+
+//? FUNCAO RENDER FINAL POST
 //* Vamos receber o render o return user e  o render user para cada elemento do array
 //*  Nesta funcao vamos renderizar um post completo  na tela com user e comentario
 //* Esta funcao sera feita a partir array resultande do  posts final
-function renderFinalPost(array) {
-  {
-    const allPosts = document.querySelector(".list__posts");
-    allPosts.innerHTML = "";
+function renderFinalPost(array, local) {
+  const allPosts = document.querySelector(".list__posts");
+  allPosts.innerHTML = "";
 
-    array.forEach((user) => {
-      const renderUser = creatUser(user, "post");
-      const renderPost = creatPost(user);
-      allPosts.appendChild(renderUser);
-      allPosts.appendChild(renderPost);
-    });
+  const modalPostUser = document.querySelector(".box__modal--user");
+  const modalPostCommentar = document.querySelector(".box__modal--comment");
+  modalPostUser.innerHTML = "";
+  modalPostCommentar.innerHTML = "";
 
-    return allPosts;
-  }
+  array.forEach((user) => {
+    const renderUser = creatUser(user, "post");
+    const renderPost = creatPost(user);
+    if (local === "post") {
+      const itemUser = document.createElement("li");
+      itemUser.classList.add("item__user");
+      itemUser.setAttribute("id", `item__user-${user.id}`);
+      allPosts.appendChild(itemUser);
+      itemUser.appendChild(renderUser);
+      itemUser.appendChild(renderPost);
+    }
+    if (local === "modalPost") {
+      modalPostUser.appendChild(renderUser);
+      modalPostCommentar.appendChild(renderPost);
+    }
+  });
+
+  return allPosts;
 }
-renderFinalPost(posts);
-//TODO: FUNCAO ARRAY COM NOVO POST
+renderFinalPost(posts, "post");
+//? FUNCAO ARRAY COM NOVO POST
 //* Esta funcao cria um novo elemento post e insere dentro do array posts
 function creatNewObjectPost(event) {
   event.preventDefault();
@@ -178,19 +235,28 @@ function creatNewObjectPost(event) {
   const textValue = document.querySelector(".input__commentar");
   const propietyText = textValue.value;
 
-  const newPost = {
-    id: posts.length + 1,
-    title: propietyTitle,
-    text: propietyText,
-    user: propietyName,
-    stack: propietyOccupation,
-    img: propietyimg,
-    likes: 0,
-  };
+  if (propietyText === "" || propietyTitle === "") {
+    alert("Favor conferir se o titulo e o texto estao preenchidos");
+    document.querySelector("#form__new-post").reset();
+    return titleValue;
+  }
+  if (propietyText !== "" && propietyTitle !== "") {
+    const newPost = {
+      id: posts.length + 1,
+      title: propietyTitle,
+      text: propietyText,
+      user: propietyName,
+      stack: propietyOccupation,
+      img: propietyimg,
+      likes: 0,
+    };
 
-  posts.push(newPost);
-  posts.reverse();
-  renderFinalPost(posts);
+    posts.push(newPost);
+    posts.reverse();
+    renderFinalPost(posts, "post");
+    document.querySelector("#form__new-post").reset();
+  }
+
   return posts;
 }
 
@@ -198,7 +264,7 @@ const newPost = document.querySelector(".button__new-post");
 
 newPost.addEventListener("click", creatNewObjectPost);
 
-//TODO: FUNCAO CRIAR POST
+//? FUNCAO CRIAR POST
 //* Esta funcao recebe o array final e cria os elementos DOM para a funcao render
 function creatPost(post) {
   const itemComment = document.createElement("div");
@@ -215,8 +281,17 @@ function creatPost(post) {
   textComment.classList.add("post__commentar");
   boxModalandLikeComment.classList.add("box__modal-and-like");
   buttonModalComment.classList.add("button__open-post");
-  iconLikeComment.setAttribute("class", "fa-solid fa-trash-can");
+  buttonModalComment.setAttribute("id", `button__open-post-${post.id}`);
+  iconLikeComment.setAttribute("class", "fa-solid fa-heart");
   countLikeComment.classList.add("count__liked-post");
+
+  itemComment.setAttribute("id", `box__comment--${post.id}`);
+  itemComment.setAttribute("id", `box__comment-posts--${post.id}`);
+  titleComment.setAttribute("id", `post__title--${post.id}`);
+  textComment.setAttribute("id", `post__commentar--${post.id}`);
+  boxModalandLikeComment.setAttribute("id", `box__modal-and-like--${post.id}`);
+  buttonModalComment.setAttribute("id", `button__open-post--${post.id}`);
+  countLikeComment.setAttribute("id", `count__liked-post--${post.id}`);
 
   titleComment.innerText = post.title;
   textComment.innerText = post.text;
@@ -233,7 +308,9 @@ function creatPost(post) {
   return itemComment;
 }
 
-//TODO: ELEMENTOS FIXOS DO HTML
+//TODO: FUNCOES REDERENTE  AO MODAL QUE ABRE CADA POST
+
+//! ELEMENTOS FIXOS DO HTML
 
 //* HEADER; MAIN; SECTION NEWPOST; SECTION POSTS; ASIDE SUGGEST USERS; FOOTER */
 

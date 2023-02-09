@@ -53,10 +53,12 @@ renderUsers(suggestUsers, "suggestUser");
 //* Esta funcao recebe um usuario e um local e cria os elementos DOM para a funcao render POST
 function creatUser(user, local) {
   const imgUser = document.createElement("img");
+  const infoUser = document.createElement("div");
   const nameUser = document.createElement("h2");
   const occupationUser = document.createElement("p");
 
   imgUser.classList.add("user__img");
+  infoUser.classList.add("user__info");
   nameUser.classList.add("user__name");
   occupationUser.classList.add("user__occupation");
 
@@ -67,15 +69,35 @@ function creatUser(user, local) {
 
   if (local === "suggestUser") {
     const itemSuggestUser = document.createElement("li");
+    const divUser = document.createElement("div");
     const fallowUser = document.createElement("button");
+
     itemSuggestUser.classList.add("item__suggest-user");
+    divUser.classList.add("div__suggest-user");
+    fallowUser.dataset.fallowId = user.id;
+    fallowUser.setAttribute("id", `button__suggest-users-${user.id}`);
     fallowUser.classList.add("button__suggest-users");
     fallowUser.innerText = "Seguir";
 
-    itemSuggestUser.appendChild(imgUser);
-    itemSuggestUser.appendChild(nameUser);
-    itemSuggestUser.appendChild(occupationUser);
+    itemSuggestUser.appendChild(divUser);
+    divUser.appendChild(imgUser);
+    divUser.appendChild(infoUser);
+    infoUser.appendChild(nameUser);
+    infoUser.appendChild(occupationUser);
     itemSuggestUser.appendChild(fallowUser);
+
+    fallowUser.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (fallowUser.innerText === "Seguir") {
+        fallowUser.classList.remove("button__following-user");
+        fallowUser.classList.add("button__suggest-following");
+        fallowUser.innerText = "Seguindo";
+      } else {
+        fallowUser.classList.remove("button__suggest-following");
+        fallowUser.classList.add("button__following-user");
+        fallowUser.innerText = "Seguir";
+      }
+    });
 
     return itemSuggestUser;
   }
@@ -85,19 +107,21 @@ function creatUser(user, local) {
     postItemUser.classList.add("box__user--posts");
 
     postItemUser.appendChild(imgUser);
-    postItemUser.appendChild(nameUser);
-    postItemUser.appendChild(occupationUser);
+    postItemUser.appendChild(infoUser);
+    infoUser.appendChild(nameUser);
+    infoUser.appendChild(occupationUser);
 
     return postItemUser;
   }
   if (local === "newPost") {
     const itemNewPostUser = document.createElement("div");
-    itemNewPostUser.classList.add("box__user");
-    itemNewPostUser.classList.add("box__user--new-post");
+    itemNewPostUser.classList.add("container__user");
+    itemNewPostUser.classList.add("container__user--new-post");
 
     itemNewPostUser.appendChild(imgUser);
-    itemNewPostUser.appendChild(nameUser);
-    itemNewPostUser.appendChild(occupationUser);
+    itemNewPostUser.appendChild(infoUser);
+    infoUser.appendChild(nameUser);
+    infoUser.appendChild(occupationUser);
 
     return itemNewPostUser;
   }
@@ -189,13 +213,10 @@ function renderFinalPost(array, local) {
   }
   const modalPostUser = document.querySelector(".box__modal--user");
   const modalPostCommentar = document.querySelector(".box__modal--comment");
-  if (local === "modalPost") {
-    modalPostUser.innerHTML = "";
-    modalPostCommentar.innerHTML = "";
-  }
+
   array.forEach((user) => {
     const renderUser = creatUser(user, "post");
-    const renderPost = creatPost(user);
+    const renderPost = creatPost(user, "post");
     if (local === "post") {
       const itemUser = document.createElement("li");
       itemUser.classList.add("item__user");
@@ -205,8 +226,10 @@ function renderFinalPost(array, local) {
       itemUser.appendChild(renderPost);
     }
     if (local === "modalPost") {
-      modalPostUser.appendChild(renderUser);
-      modalPostCommentar.appendChild(renderPost);
+      const renderModalUser = creatUser(user, "modalPost");
+      const renderModalPost = creatPost(user, "modalPost");
+      modalPostUser.appendChild(renderModalUser);
+      modalPostCommentar.appendChild(renderModalPost);
     }
   });
 
@@ -260,76 +283,83 @@ newPost.addEventListener("click", creatNewObjectPost);
 
 //? FUNCAO CRIAR POST
 //* Esta funcao recebe o array final e cria os elementos DOM para a funcao render
-function creatPost(post) {
-  const itemComment = document.createElement("div");
-  const titleComment = document.createElement("h3");
-  const textComment = document.createElement("p");
-  const boxModalandLikeComment = document.createElement("span");
-  const buttonModalComment = document.createElement("button");
-  const iconLikeComment = document.createElement("i");
-  const countLikeComment = document.createElement("p");
+function creatPost(post, local) {
+  if (local === "post") {
+    const itemComment = document.createElement("div");
+    const titleComment = document.createElement("h3");
+    const textComment = document.createElement("p");
+    const boxModalandLikeComment = document.createElement("span");
+    const buttonModalComment = document.createElement("button");
+    const iconLikeComment = document.createElement("i");
+    const countLikeComment = document.createElement("p");
 
-  itemComment.classList.add("box__comment");
-  itemComment.classList.add("box__comment--posts");
-  titleComment.classList.add("post__title");
-  textComment.classList.add("post__commentar");
-  boxModalandLikeComment.classList.add("box__modal-and-like");
-  buttonModalComment.classList.add("button__open-post");
-  buttonModalComment.setAttribute("id", `button__open-post-${post.id}`);
-  iconLikeComment.setAttribute("class", "fa-solid fa-heart");
-  countLikeComment.classList.add("count__liked-post");
+    itemComment.classList.add("box__comment");
+    itemComment.classList.add("box__comment--posts");
+    titleComment.classList.add("post__title");
+    textComment.classList.add("post__commentar");
+    boxModalandLikeComment.classList.add("box__modal-and-like");
+    buttonModalComment.classList.add("button__open-post");
+    buttonModalComment.setAttribute("id", `button__open-post-${post.id}`);
+    iconLikeComment.setAttribute("class", "fa-solid fa-heart");
+    countLikeComment.classList.add("count__liked-post");
 
-  buttonModalComment.setAttribute("id", `button__open-post--${post.id}`);
-  countLikeComment.setAttribute("id", `count__liked-post--${post.id}`);
+    buttonModalComment.setAttribute("id", `button__open-post--${post.id}`);
+    countLikeComment.setAttribute("id", `count__liked-post--${post.id}`);
 
-  titleComment.innerText = post.title;
-  textComment.innerText = post.text;
-  buttonModalComment.dataset.postId = post.id;
-  iconLikeComment.dataset.likeId = post.id;
-  buttonModalComment.innerText = "Abrir Post";
-  countLikeComment.innerText = post.likes;
+    titleComment.innerText = post.title;
+    textComment.innerText = post.text;
+    buttonModalComment.dataset.postId = post.id;
+    iconLikeComment.dataset.likeId = post.id;
+    buttonModalComment.innerText = "Abrir Post";
+    countLikeComment.innerText = post.likes;
 
-  itemComment.appendChild(titleComment);
-  itemComment.appendChild(textComment);
-  itemComment.appendChild(boxModalandLikeComment);
-  boxModalandLikeComment.appendChild(buttonModalComment);
-  boxModalandLikeComment.appendChild(iconLikeComment);
-  boxModalandLikeComment.appendChild(countLikeComment);
+    itemComment.appendChild(titleComment);
+    itemComment.appendChild(textComment);
+    itemComment.appendChild(boxModalandLikeComment);
+    boxModalandLikeComment.appendChild(buttonModalComment);
+    boxModalandLikeComment.appendChild(iconLikeComment);
+    boxModalandLikeComment.appendChild(countLikeComment);
 
-  //! EVENTO QUE ABRE O MODAL ATRAVÉS DO BOTAO CRIADO
+    //! EVENTO QUE ABRE O MODAL ATRAVÉS DO BOTAO CRIADO
 
-  buttonModalComment.addEventListener("click", renderModal);
+    buttonModalComment.addEventListener("click", renderModal);
 
-  /*   buttonModalComment.addEventListener("click", function (e) {
-    e.preventDefault();
+    //! EVENTO QUE ADICIONA LIKES EM UM POST
+    iconLikeComment.addEventListener("click", function (e) {
+      e.preventDefault();
+      const likeId = e.target.dataset.likeId;
+      console.log(likeId);
+      const post = posts.find((post) => post.id === parseInt(likeId));
+      post.likes++;
+      console.log(posts);
+      document.getElementById(
+        `count__liked-post--${post.id}`
+      ).innerText = `${post.likes}`;
+    });
 
-    const postId = e.target.dataset.postId;
-    const post = posts.filter((post) => post.id === parseInt(postId));
-    const modal = document.querySelector(".modal__controller-open-post");
-    renderFinalPost(post, "modalPost");
-    modal.showModal();
+    return itemComment;
+  }
+  if (local === "modalPost") {
+    const itemComment = document.createElement("div");
+    const titleComment = document.createElement("h3");
+    const textComment = document.createElement("p");
 
-    closeModalPost();
-  }); */
+    itemComment.classList.add("box__comment");
+    itemComment.classList.add("box__comment--posts");
+    titleComment.classList.add("post__title");
+    textComment.classList.add("post__commentar");
 
-  //! EVENTO QUE ADICIONA LIKES EM UM POST
-  iconLikeComment.addEventListener("click", function (e) {
-    e.preventDefault();
-    const likeId = e.target.dataset.likeId;
-    console.log(likeId);
-    const post = posts.find((post) => post.id === parseInt(likeId));
-    post.likes++;
-    console.log(posts);
-    document.getElementById(
-      `count__liked-post--${post.id}`
-    ).innerText = `${post.likes}`;
-  });
+    titleComment.innerText = post.title;
+    textComment.innerText = post.text;
 
-  return itemComment;
+    itemComment.appendChild(titleComment);
+    itemComment.appendChild(textComment);
+
+    return itemComment;
+  }
 }
 function renderModal(e) {
   e.preventDefault();
-
   const postId = e.target.dataset.postId;
   const post = posts.filter((post) => post.id === parseInt(postId));
   const modal = document.querySelector(".modal__controller-open-post");
@@ -362,9 +392,41 @@ function closeModalPost() {
   );
 
   closeModalPost.addEventListener("click", () => {
-    modalController.innerHTML = "";
+    const modalPostUser = document.querySelector(".box__modal--user");
+    const modalPostCommentar = document.querySelector(".box__modal--comment");
+    modalPostUser.innerHTML = "";
+    modalPostCommentar.innerHTML = "";
     modalController.close();
   });
 }
 
-function addLikes(event) {}
+//! FUNCAO ALTERA BOTAO LOGIN
+
+const login = document.querySelector(".header__button--modal");
+login.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (login.innerText === "Login") {
+    login.classList.remove("button__following-user");
+    login.classList.add("button__suggest-following");
+    login.innerText = "Sair";
+  } else {
+    login.classList.remove("button__suggest-following");
+    login.classList.add("button__following-user");
+    login.innerText = "Login";
+  }
+});
+//*
+//! FUNCAO ALTERA BOTAO POSTAR
+
+/* fallowUser.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (fallowUser.innerText === "Seguir") {
+    fallowUser.classList.remove("button__following-user");
+    fallowUser.classList.add("button__suggest-following");
+    fallowUser.innerText = "Seguindo";
+  } else {
+    fallowUser.classList.remove("button__suggest-following");
+    fallowUser.classList.add("button__following-user");
+    fallowUser.innerText = "Seguir";
+  }
+}); */

@@ -48,8 +48,6 @@ function renderUsers(usersArray, local) {
 }
 
 renderUsers(suggestUsers, "suggestUser");
-/* renderUsers(posts, "post"); */
-/* renderUsers(returnUser("Aline"), "newPost"); */
 
 //? FUNCAO CRIAR USER
 //* Esta funcao recebe um usuario e um local e cria os elementos DOM para a funcao render POST
@@ -61,10 +59,6 @@ function creatUser(user, local) {
   imgUser.classList.add("user__img");
   nameUser.classList.add("user__name");
   occupationUser.classList.add("user__occupation");
-
-  imgUser.setAttribute("id", `user__img--${user.id}`);
-  nameUser.setAttribute("id", `user__name--${user.id}`);
-  occupationUser.setAttribute("id", `user__occupation--${user.id}`);
 
   imgUser.src = user.img;
   imgUser.alt = user.user;
@@ -123,7 +117,7 @@ function returnUser(inputUser) {
     (user) => standartString(user.user) === normalizeFindUser
   );
   if (existentUser.length > 0) {
-    console.log(existentUser);
+    /*  console.log(existentUser); */
     renderUsers(existentUser, "newPost");
     return existentUser;
   } else {
@@ -144,10 +138,8 @@ function creatAnonymousUser(userName) {
     },
   ];
 
-  const arrayFinal = suggestUsers.concat(anonymousUser);
   renderUsers(anonymousUser, "newPost");
-  console.log(arrayFinal);
-  console.log(anonymousUser);
+
   //* aqui criar um info que ele nao pode seguir os usuarios
   return anonymousUser;
 }
@@ -192,13 +184,15 @@ function closeModalLogin() {
 //* Esta funcao sera feita a partir array resultande do  posts final
 function renderFinalPost(array, local) {
   const allPosts = document.querySelector(".list__posts");
-  allPosts.innerHTML = "";
-
+  if (local === "post") {
+    allPosts.innerHTML = "";
+  }
   const modalPostUser = document.querySelector(".box__modal--user");
   const modalPostCommentar = document.querySelector(".box__modal--comment");
-  modalPostUser.innerHTML = "";
-  modalPostCommentar.innerHTML = "";
-
+  if (local === "modalPost") {
+    modalPostUser.innerHTML = "";
+    modalPostCommentar.innerHTML = "";
+  }
   array.forEach((user) => {
     const renderUser = creatUser(user, "post");
     const renderPost = creatPost(user);
@@ -285,16 +279,13 @@ function creatPost(post) {
   iconLikeComment.setAttribute("class", "fa-solid fa-heart");
   countLikeComment.classList.add("count__liked-post");
 
-  itemComment.setAttribute("id", `box__comment--${post.id}`);
-  itemComment.setAttribute("id", `box__comment-posts--${post.id}`);
-  titleComment.setAttribute("id", `post__title--${post.id}`);
-  textComment.setAttribute("id", `post__commentar--${post.id}`);
-  boxModalandLikeComment.setAttribute("id", `box__modal-and-like--${post.id}`);
   buttonModalComment.setAttribute("id", `button__open-post--${post.id}`);
   countLikeComment.setAttribute("id", `count__liked-post--${post.id}`);
 
   titleComment.innerText = post.title;
   textComment.innerText = post.text;
+  buttonModalComment.dataset.postId = post.id;
+  iconLikeComment.dataset.likeId = post.id;
   buttonModalComment.innerText = "Abrir Post";
   countLikeComment.innerText = post.likes;
 
@@ -305,9 +296,48 @@ function creatPost(post) {
   boxModalandLikeComment.appendChild(iconLikeComment);
   boxModalandLikeComment.appendChild(countLikeComment);
 
+  //! EVENTO QUE ABRE O MODAL ATRAVÉS DO BOTAO CRIADO
+
+  buttonModalComment.addEventListener("click", renderModal);
+
+  /*   buttonModalComment.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const postId = e.target.dataset.postId;
+    const post = posts.filter((post) => post.id === parseInt(postId));
+    const modal = document.querySelector(".modal__controller-open-post");
+    renderFinalPost(post, "modalPost");
+    modal.showModal();
+
+    closeModalPost();
+  }); */
+
+  //! EVENTO QUE ADICIONA LIKES EM UM POST
+  iconLikeComment.addEventListener("click", function (e) {
+    e.preventDefault();
+    const likeId = e.target.dataset.likeId;
+    console.log(likeId);
+    const post = posts.find((post) => post.id === parseInt(likeId));
+    post.likes++;
+    console.log(posts);
+    document.getElementById(
+      `count__liked-post--${post.id}`
+    ).innerText = `${post.likes}`;
+  });
+
   return itemComment;
 }
+function renderModal(e) {
+  e.preventDefault();
 
+  const postId = e.target.dataset.postId;
+  const post = posts.filter((post) => post.id === parseInt(postId));
+  const modal = document.querySelector(".modal__controller-open-post");
+  renderFinalPost(post, "modalPost");
+  modal.showModal();
+
+  closeModalPost();
+}
 //TODO: FUNCOES REDERENTE  AO MODAL QUE ABRE CADA POST
 
 //! ELEMENTOS FIXOS DO HTML
@@ -324,3 +354,17 @@ function standartString(userName) {
 
   return standart;
 }
+
+function closeModalPost() {
+  const closeModalPost = document.querySelector(".button__close-post");
+  const modalController = document.querySelector(
+    ".modal__controller-open-post"
+  );
+
+  closeModalPost.addEventListener("click", () => {
+    modalController.innerHTML = "";
+    modalController.close();
+  });
+}
+
+function addLikes(event) {}

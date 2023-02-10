@@ -1,7 +1,7 @@
 header {
   position: fixed;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   background-color: var(--color-grey-1);
   height: 76px;
@@ -10,11 +10,7 @@ header {
   max-width: 1440px;
 }
 
-.header__logo {
-  padding-left: 100px;
-}
 .header__button--modal {
-  padding-right: 100px;
   font-size: var(--font-text-2);
   color: var(--color-WhiteFixed);
   background-color: transparent;
@@ -30,13 +26,15 @@ main {
 }
 
 main > div {
-  padding: 0 20px;
+  padding: 0 9px 0 20px;
+  margin: 0 22px 0 22px;
 }
 .container__user--new-post {
   width: 95%;
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-bottom: 20px;
 }
 
 #form__new-post {
@@ -253,7 +251,8 @@ main > div {
 }
 
 .modal__container-open-post {
-  margin: 30px 24px;
+  margin: 30px;
+  padding-right: 20px;
   width: 100%;
   border-radius: 8px;
   width: 345px;

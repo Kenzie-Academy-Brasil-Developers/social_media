@@ -1,4 +1,7 @@
 @media (min-width: 775px) {
+  main {
+    max-width: 1440px;
+  }
   main > div {
     margin-left: 100px;
     margin-right: 79px;

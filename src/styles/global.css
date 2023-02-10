@@ -47,6 +47,29 @@ body {
   --size-height-1: 100vh;
 }
 
+header {
+  position: fixed;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--color-grey-1);
+  height: 76px;
+  width: 100%;
+  z-index: 1001;
+  max-width: 1440px;
+}
+
+main {
+  width: 100%;
+  max-width: 1440px;
+  padding-top: 124px;
+  background-color: var(--color-WhiteFixed);
+}
+
+main > div {
+  padding: 0 9px 0 20px;
+  margin: 0 22px 0 22px;
+}
 dialog {
   padding: 0;
   width: 385px;
@@ -57,68 +80,4 @@ dialog {
 
 dialog::backdrop {
   background-color: rgba(33, 37, 41, 0.5);
-}
-
-.button__suggest-users {
-  font-size: var(--font-text-2);
-  background-color: var(--color-WhiteFixed);
-  color: var(--color-grey-1);
-  line-height: var(--line-height-text-2);
-  font-weight: var(--font-weight-text-2);
-  border-color: var(--color-grey-1);
-  border: solid 1px;
-  width: 54px;
-  height: 28px;
-  border-radius: 2px;
-  padding: 0px, 12px, 0px, 12px;
-}
-
-.button__suggest-users:hover {
-  background-color: #edf2ff;
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  cursor: pointer;
-}
-
-.button__suggest-users:active {
-  background-color: var(--color-primary);
-  color: var(--color-WhiteFixed);
-  border-color: var(--color-primary);
-  width: 89px;
-}
-
-.button__suggest-following {
-  background-color: var(--color-primary);
-  color: var(--color-WhiteFixed);
-  border-color: var(--color-primary);
-  width: 89px;
-}
-
-.button__suggest-following:hover {
-  background-color: var(--color-secundary);
-  color: var(--color-WhiteFixed);
-  border-color: var(--color-secundary);
-  width: 89px;
-  cursor: pointer;
-}
-
-.button__open-post {
-  font-size: var(--font-text-2);
-  background-color: var(--color-grey-1);
-  color: var(--color-WhiteFixed);
-  line-height: var(--line-height-text-2);
-  font-weight: var(--font-weight-title-2);
-  border-color: var(--color-grey-1);
-  border: solid 1px;
-  width: 92px;
-  height: 38px;
-  border-radius: 4px;
-  padding: 0px, 12px, 0px, 12px;
-}
-
-.button__open-post:hover {
-  background-color: var(--color-grey-0);
-  border-color: var(--color-grey-0);
-  border: solid 1px;
-  cursor: pointer;
 }

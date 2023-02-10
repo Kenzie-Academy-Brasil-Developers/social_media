@@ -127,8 +127,6 @@ function creatUser(user, local) {
   }
 }
 
-//TODO: FUNCAO IDENTIFICA USUARIO / MODAL
-
 //? FUNCAO ENTRADA USER ATRAVES DO LOGIN MODAL
 //* Ao clicar no login o usuario insere um nome e sobrenome e envia para esta funcao
 //* se o usuario nao for localizado no array users é criado um usuario anonimo novo com uma img avatar
@@ -141,7 +139,6 @@ function returnUser(inputUser) {
     (user) => standartString(user.user) === normalizeFindUser
   );
   if (existentUser.length > 0) {
-    /*  console.log(existentUser); */
     renderUsers(existentUser, "newPost");
     return existentUser;
   } else {
@@ -167,8 +164,13 @@ function creatAnonymousUser(userName) {
   //* aqui criar um info que ele nao pode seguir os usuarios
   return anonymousUser;
 }
+
+//* este console log é apenas para o usuário nao ficar me branco
+
 console.log(returnUser("Carla Maria"));
 
+//? EXTRA -  FUNCAO RENDER USUARIO LOGADO
+//* esta funcao renderiza o usuario que realizou o login ou um usuário anonimo
 function renderlogedUser(e) {
   e.preventDefault();
   const userLoged = document.querySelector("#input__identify-user").value;
@@ -176,6 +178,8 @@ function renderlogedUser(e) {
   document.querySelector(".modal__form--login").reset();
 }
 
+//? EXTRA -  FUNCAO MODAL DE LOGIN
+//* esta funcao abre ou fecha o modal de login
 function handleModalLogin() {
   const openModalLogin = document.querySelector(".header__button--modal");
   const modalController = document.querySelector(".modal__controller-login");
@@ -203,9 +207,9 @@ function closeModalLogin() {
 //TODO: FUNCOES REFERENTE AOS POSTS
 
 //? FUNCAO RENDER FINAL POST
-//* Vamos receber o render o return user e  o render user para cada elemento do array
+//* Nesta funcao recebemos  o render o return user e  o render user para cada elemento do array
 //*  Nesta funcao vamos renderizar um post completo  na tela com user e comentario
-//* Esta funcao sera feita a partir array resultande do  posts final
+//* Esta funcao sera feita a partir array resultande da funcao creatNewObjectPost
 function renderFinalPost(array, local) {
   const allPosts = document.querySelector(".list__posts");
   if (local === "post") {
@@ -236,8 +240,10 @@ function renderFinalPost(array, local) {
   return allPosts;
 }
 renderFinalPost(posts, "post");
+
 //? FUNCAO ARRAY COM NOVO POST
 //* Esta funcao cria um novo elemento post e insere dentro do array posts
+
 function creatNewObjectPost(event) {
   event.preventDefault();
   const imgUserPost = document.querySelector(".user__img");
@@ -282,6 +288,7 @@ const newPost = document.querySelector(".button__new-post");
 newPost.addEventListener("click", creatNewObjectPost);
 
 //? FUNCAO CRIAR POST
+
 //* Esta funcao recebe o array final e cria os elementos DOM para a funcao render
 function creatPost(post, local) {
   if (local === "post") {
@@ -307,7 +314,7 @@ function creatPost(post, local) {
     countLikeComment.setAttribute("id", `count__liked-post--${post.id}`);
 
     titleComment.innerText = post.title;
-    textComment.innerText = post.text;
+    textComment.innerText = `${post.text.substring(0, 150)}...`;
     buttonModalComment.dataset.postId = post.id;
     iconLikeComment.dataset.likeId = post.id;
     buttonModalComment.innerText = "Abrir Post";
@@ -368,11 +375,7 @@ function renderModal(e) {
 
   closeModalPost();
 }
-//TODO: FUNCOES REDERENTE  AO MODAL QUE ABRE CADA POST
-
-//! ELEMENTOS FIXOS DO HTML
-
-//* HEADER; MAIN; SECTION NEWPOST; SECTION POSTS; ASIDE SUGGEST USERS; FOOTER */
+//TODO: FUNCOES NECESSARIAS
 
 function standartString(userName) {
   let standart = userName
@@ -398,35 +401,35 @@ function closeModalPost() {
     modalPostCommentar.innerHTML = "";
     modalController.close();
   });
+
+  modalController.addEventListener("keydown", () => {
+    const modalPostUser = document.querySelector(".box__modal--user");
+    const modalPostCommentar = document.querySelector(".box__modal--comment");
+    modalPostUser.innerHTML = "";
+    modalPostCommentar.innerHTML = "";
+  });
 }
 
-//! FUNCAO ALTERA BOTAO LOGIN
-
-const login = document.querySelector(".header__button--modal");
-login.addEventListener("click", function (e) {
-  e.preventDefault();
-  if (login.innerText === "Login") {
-    login.classList.remove("button__following-user");
-    login.classList.add("button__suggest-following");
-    login.innerText = "Sair";
-  } else {
-    login.classList.remove("button__suggest-following");
-    login.classList.add("button__following-user");
-    login.innerText = "Login";
-  }
-});
-//*
 //! FUNCAO ALTERA BOTAO POSTAR
 
-/* fallowUser.addEventListener("click", function (e) {
-  e.preventDefault();
-  if (fallowUser.innerText === "Seguir") {
-    fallowUser.classList.remove("button__following-user");
-    fallowUser.classList.add("button__suggest-following");
-    fallowUser.innerText = "Seguindo";
-  } else {
-    fallowUser.classList.remove("button__suggest-following");
-    fallowUser.classList.add("button__following-user");
-    fallowUser.innerText = "Seguir";
+const postButton = document.querySelector(".button__new-post");
+const postTitle = document.querySelector(".input__title");
+const postText = document.querySelector(".input__commentar");
+
+postTitle.addEventListener("keypress", (event) => {
+  const value = event.currentTarget.value;
+  postButton.disabled = false;
+
+  if (value === "") {
+    postButton.disabled = true;
   }
-}); */
+});
+
+postText.addEventListener("keypress", (event) => {
+  const value = event.currentTarget.value;
+  postButton.disabled = false;
+
+  if (value === "") {
+    postButton.disabled = true;
+  }
+});

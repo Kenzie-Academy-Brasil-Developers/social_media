@@ -1,17 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700&family=Nunito&display=swap");
 body {
   font-family: "Inter", sans-serif;
   margin: 0 auto;
-
   box-sizing: border-box;
   width: 100%;
+  max-width: 1440px;
+  height: 100vh;
+  padding: 0;
+  background-color: black;
 }
-
-/* dialog {
-  padding: 0px 40px;
-  background-color: var(--color-grey-2);
-  border: var(--color-primary) solid 1px;
-} */
 
 :root {
   --color-primary: #4263eb;
@@ -26,11 +23,11 @@ body {
   --color-grey-opacity-1: rgba(33, 37, 41, 0.5);
   --color-like: #d7443e;
 
-  --font-title-1: 28px;
-  --font-title-2: 20px;
-  --font-text-1: 16px;
-  --font-text-2: 14px;
-  --font-text-3: 12px;
+  --font-title-1: 1.75rem;
+  --font-title-2: 1.25rem;
+  --font-text-1: 1rem;
+  --font-text-2: 0.875rem;
+  --font-text-3: 0.75rem;
 
   --font-weight-title-1: 700;
   --font-weight-title-2: 600;
@@ -48,6 +45,18 @@ body {
   --size-width-3: 1600px;
 
   --size-height-1: 100vh;
+}
+
+dialog {
+  padding: 0;
+  width: 385px;
+  border-radius: 8px;
+  border: none;
+  overflow-x: hidden;
+}
+
+dialog::backdrop {
+  background-color: rgba(33, 37, 41, 0.5);
 }
 
 .button__suggest-users {

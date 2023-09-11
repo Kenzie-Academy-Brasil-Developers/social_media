@@ -174,10 +174,10 @@ export function creatPost(post, local) {
     iconLikeComment.addEventListener("click", function (e) {
       e.preventDefault();
       const likeId = e.target.dataset.likeId;
-      console.log(likeId);
+
       const post = posts.find((post) => post.id === parseInt(likeId));
       post.likes++;
-      console.log(posts);
+
       document.getElementById(
         `count__liked-post--${post.id}`
       ).innerText = `${post.likes}`;

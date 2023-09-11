@@ -27,7 +27,7 @@ postTitle.addEventListener("keypress", (event) => {
   }
 });
 
-postText.addEventListener("keypress", (event) => {
+postText.addEventListener("keydown", (event) => {
   const value = event.currentTarget.value;
   postButton.disabled = false;
 

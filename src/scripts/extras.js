@@ -41,7 +41,7 @@ export function creatAnonymousUser(userName) {
 
 //* este console log é apenas para o usuário nao ficar me branco
 
-console.log(returnUser("Carla Maria"));
+returnUser("Carla Maria");
 
 //? EXTRA -  FUNCAO RENDER USUARIO LOGADO
 //* esta funcao renderiza o usuario que realizou o login ou um usuário anonimo

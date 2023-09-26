@@ -22,7 +22,7 @@ This is a project aimed at reproducing the home page of a social media platform 
 
 ## How to Contribute
 
-If you would like to contribute to this project, feel free to [open issues]), suggest improvements, or [submit pull requests]. Any help is welcome!
+If you would like to contribute to this project, feel free to open issues, suggest improvements, or submit pull requests. Any help is welcome!
 
 ## How to Use
 
